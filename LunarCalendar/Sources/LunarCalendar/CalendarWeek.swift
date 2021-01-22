@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct CalendarWeek: View {
-    var body: some View {
+public struct CalendarWeek: View {
+    public var body: some View {
         HStack{
             ForEach(1...7, id: \.self) { count in
                 Text(Tool.getWeek(week: count))

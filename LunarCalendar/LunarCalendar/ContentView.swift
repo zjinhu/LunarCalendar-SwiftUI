@@ -8,8 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var isPresented = false
     var body: some View {
-        LunarCalendar()
+        
+        Button(action: {
+            isPresented.toggle()
+        }) {
+            Text("回到今天")
+        }
+        .padding(20.0)
+        .sheet(isPresented: $isPresented) {
+            LunarCalendar(select: { date in
+                print("\(date)")
+            })
+        }
     }
 }
 

@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-struct CalendarGrid<DateView>: View where DateView: View {
+public struct CalendarGrid<DateView>: View where DateView: View {
     @Environment(\.calendar) var calendar
     
     let interval: DateInterval
     let showHeaders: Bool
     let content: (Date) -> DateView
     
-    init(interval: DateInterval, showHeaders: Bool = true, @ViewBuilder content: @escaping (Date) -> DateView) {
+    public init(interval: DateInterval, showHeaders: Bool = true, @ViewBuilder content: @escaping (Date) -> DateView) {
         self.interval = interval
         self.showHeaders = showHeaders
         self.content = content
     }
     
-    var body: some View {
+    public var body: some View {
         ///添加到可以滚动
         ScrollView(.vertical, showsIndicators: false){
             ///添加滚动监听

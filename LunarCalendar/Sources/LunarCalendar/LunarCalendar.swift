@@ -1,7 +1,7 @@
 
 import SwiftUI
 
-struct LunarCalendar : View{
+public struct LunarCalendar : View{
     @Environment(\.calendar) var calendar
     @Environment(\.presentationMode) var mode
     
@@ -9,7 +9,13 @@ struct LunarCalendar : View{
         calendar.dateInterval(of: .year, for: Date())!
     }
     
-    var body: some View {
+    private let onSelect: (Date) -> Void
+    
+    public init(select: @escaping (Date) -> Void) {
+      self.onSelect = select
+    }
+    
+    public var body: some View {
         
         VStack(alignment: .center, spacing: 0, content: {
             CalendarWeek()
@@ -23,6 +29,9 @@ struct LunarCalendar : View{
                             isWeekDay: Tool.isWeekDay(date: date))
                     .onTapGesture {
                         mode.wrappedValue.dismiss()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            self.onSelect(date)
+                        }
                     }
             }
         })
@@ -33,6 +42,8 @@ struct LunarCalendar : View{
 
 struct LunarCalendar_Previews: PreviewProvider {
     static var previews: some View {
-        LunarCalendar()
+        LunarCalendar(select: {_ in
+            
+        })
     }
 }
