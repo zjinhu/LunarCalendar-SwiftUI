@@ -88,9 +88,9 @@ public struct CalendarGrid<DateView>: View where DateView: View {
         ///先拿到月份间距,例如1号--31号
         guard let monthInterval = calendar.dateInterval(of: .month, for: month) else { return [] }
         ///先获取第一天所在周的周一到周日
-        let monthFirstWeek = monthInterval.start.getWeekStartAndEnd()
+        let monthFirstWeek = monthInterval.start.getWeekStartAndEnd(isEnd: false)
         ///获取月最后一天所在周的周一到周日
-        let monthLastWeek = monthInterval.end.getWeekStartAndEnd()
+        let monthLastWeek = monthInterval.end.getWeekStartAndEnd(isEnd: true)
         ///然后根据月初所在周的周一为0号row 到月末所在周的周日为最后一个row生成数组
         return calendar.generateDates(
             inside: DateInterval(start: monthFirstWeek.start, end: monthLastWeek.end),
@@ -122,12 +122,18 @@ extension Date {
     }
     
     ///获取当前Date所在周的周一到周日
-    func getWeekStartAndEnd() -> DateInterval{
+    func getWeekStartAndEnd(isEnd: Bool) -> DateInterval{
         var date = self
         ///因为一周的起始日是周日,周日已经算是下一周了
         ///如果是周日就到退回去两天
-        if date.getWeekDay() == 1 {
-            date = date.addingTimeInterval(-60 * 60 * 24 * 2)
+        if isEnd {
+            if date.getWeekDay() <= 2 {
+                date = date.addingTimeInterval(-60 * 60 * 24 * 2)
+            }
+        }else{
+            if date.getWeekDay() == 1 {
+                date = date.addingTimeInterval(-60 * 60 * 24 * 2)
+            }
         }
         ///使用处理后的日期拿到这一周的间距: 周日到周六
         let week = Calendar.current.dateInterval(of: .weekOfMonth, for: date)!
